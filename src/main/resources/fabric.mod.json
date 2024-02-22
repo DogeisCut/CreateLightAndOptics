@@ -15,7 +15,13 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      "com.dogeiscut.loptics.Main"
+      "com.dogeiscut.loptics.LightAndOptics"
+    ],
+    "client": [
+      "com.dogeiscut.loptics.LightAndOpticsClient"
+    ],
+    "fabric-datagen": [
+      "com.dogeiscut.loptics.LightAndOpticsData"
     ]
   },
   "mixins": [
