@@ -6,7 +6,7 @@
 		"laser_emitter_side": "loptics:block/laser_emitter_side",
 		"laser_emitter_top": "loptics:block/laser_emitter_top",
 		"smooth_dark_log_top": "create:block/smooth_dark_log_top",
-		"glass": "block/glass",
+		"glass": "minecraft:block/glass",
 		"laser_emitter_bottom": "loptics:block/laser_emitter_bottom"
 	},
 	"elements": [

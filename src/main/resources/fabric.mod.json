@@ -15,7 +15,7 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      "dogeiscut.lightandoptics.loptics.Main"
+      "com.dogeiscut.loptics.Main"
     ]
   },
   "mixins": [

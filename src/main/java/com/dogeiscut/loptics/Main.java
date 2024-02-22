@@ -1,4 +1,4 @@
-package dogeiscut.lightandoptics.loptics;
+package com.dogeiscut.loptics;
 
 import com.simibubi.create.Create;
 
