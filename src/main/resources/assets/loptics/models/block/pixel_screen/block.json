@@ -1,13 +1,13 @@
 {
 	"credit": "Made with Blockbench",
 	"textures": {
-		"0": "pixel_screen_screen_white",
-		"2": "pixel_screen_side",
-		"3": "industrial_iron_block",
-		"4": "pixel_screen_inside_wires",
-		"5": "pixel_screen_back",
-		"particle": "pixel_screen_screen_white"
-	},
+		"0": "loptics:block/pixel_screen_screen_white",
+		"2": "loptics:block/pixel_screen_side",
+		"3": "create:block/industrial_iron_block",
+		"4": "loptics:block/pixel_screen_inside_wires",
+		"5": "loptics:block/pixel_screen_back",
+    "particle": "create:block/industrial_iron_block"
+  },
 	"elements": [
 		{
 			"from": [0, 0, 0],

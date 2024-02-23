@@ -1,6 +1,5 @@
 package com.dogeiscut.loptics;
 
-import com.dogeiscut.loptics.infastructure.data.LightAndOpticsDatagen;
 import com.simibubi.create.Create;
 
 import com.simibubi.create.foundation.data.CreateRegistrate;
@@ -10,7 +9,8 @@ import io.github.fabricators_of_create.porting_lib.util.EnvExecutor;
 import net.fabricmc.api.ModInitializer;
 
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
-import net.minecraft.resources.ResourceLocation;
+
+import net.minecraft.util.Identifier;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,7 +48,7 @@ public class LightAndOptics implements ModInitializer {
 	}
 
 	public static void gatherData(FabricDataGenerator.Pack pack, ExistingFileHelper helper) {
-		LightAndOpticsDatagen.addExtraRegistrateData();
+		//LightAndOpticsDatagen.addExtraRegistrateData();
 
 		//TagGen.datagen();
 		//TagLangGen.datagen();
@@ -65,7 +65,7 @@ public class LightAndOptics implements ModInitializer {
 		//pack.addProvider(CreateRecipeSerializerTagsProvider::new);
 	}
 
-	public static ResourceLocation asResource(String path) {
-		return new ResourceLocation(ID, path);
+	public static Identifier asResource(String path) {
+		return new Identifier(ID, path);
 	}
 }

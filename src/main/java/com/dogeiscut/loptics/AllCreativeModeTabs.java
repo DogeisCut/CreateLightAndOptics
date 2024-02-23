@@ -1,6 +1,5 @@
 package com.dogeiscut.loptics;
 
-import net.minecraft.world.item.CreativeModeTab;
 
 import static com.dogeiscut.loptics.LightAndOptics.REGISTRATE;
 

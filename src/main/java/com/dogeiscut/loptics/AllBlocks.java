@@ -9,8 +9,9 @@ import com.simibubi.create.foundation.data.CreateRegistrate;
 import com.simibubi.create.foundation.data.SharedProperties;
 import com.tterrag.registrate.util.entry.BlockEntry;
 
-import net.minecraft.client.renderer.RenderType;
-import net.minecraft.world.level.material.MapColor;
+import net.minecraft.block.AbstractBlock;
+import net.minecraft.block.MapColor;
+import net.minecraft.client.render.RenderLayer;
 
 import static com.dogeiscut.loptics.LightAndOptics.REGISTRATE;
 import static com.simibubi.create.foundation.data.ModelGen.customItemModel;
@@ -24,11 +25,12 @@ public class AllBlocks {
 	public static final BlockEntry<LaserEmitterBlock> LASER_EMITTER =
 			REGISTRATE.block("laser_emitter", LaserEmitterBlock::new)
 					.initialProperties(SharedProperties::softMetal)
-					.properties(p -> p.noOcclusion().mapColor(MapColor.TERRACOTTA_YELLOW))
+					.properties(p -> p.mapColor(MapColor.TERRACOTTA_YELLOW))
+					.properties(AbstractBlock.Settings::nonOpaque)
 					.transform(axeOrPickaxe())
 					.blockstate(BlockStateGen.directionalBlockProviderIgnoresWaterlogged(true))
 					.transform(BlockStressDefaults.setImpact(5.0))
-					.addLayer(() -> RenderType::cutoutMipped)
+					.addLayer(() -> RenderLayer::getCutoutMipped)
 					.item()
 					.transform(customItemModel())
 					.register();

@@ -19,9 +19,6 @@
     ],
     "client": [
       "com.dogeiscut.loptics.LightAndOpticsClient"
-    ],
-    "fabric-datagen": [
-      "com.dogeiscut.loptics.LightAndOpticsData"
     ]
   },
   "mixins": [
