@@ -47,6 +47,7 @@ public class LaserEmitterRenderer extends KineticBlockEntityRenderer<LaserEmitte
 		double thickness = blockEntity.getLaserStrength(); // Adjust thickness based on preference
 
 		drawLaser(matrices, vertexConsumers.getBuffer(RenderLayer.getCutoutMipped()), direction, distance, thickness);
+		drawLaser(matrices, vertexConsumers.getBuffer(RenderLayer.getCutoutMipped()), direction, distance, -(thickness+0.1));
 	}
 
 	private void drawLaser(MatrixStack matrices, VertexConsumer vertexConsumer, Direction direction, double laserDist, double laserThickness) {
