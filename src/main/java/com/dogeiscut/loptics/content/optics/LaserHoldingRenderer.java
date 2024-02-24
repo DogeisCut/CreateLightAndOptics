@@ -20,9 +20,10 @@ public class LaserHoldingRenderer<T extends LaserHoldingBlockEntity> extends Kin
 	private static void renderBeamVertex(MatrixStack matrices, VertexConsumer vertices, float x, float y, float z, float u, float v) {
 		matrices.push();
 		matrices.translate(x, y, z);
+		//todo: somehow figure out how to render this as a solid color instead of being textured.
 		vertices.vertex(matrices.peek().getPositionMatrix(), 0.0F, 0.0F, 0.0F)
 				.color(1.0f, 1.0f, 1.0f, 1.0f)
-				.texture(u, v)
+				.texture(0, 0)
 				.overlay(OverlayTexture.DEFAULT_UV)
 				.light(15728880)
 				.normal(0.0F, 1.0F, 0.0F)
@@ -34,7 +35,7 @@ public class LaserHoldingRenderer<T extends LaserHoldingBlockEntity> extends Kin
 	public void renderSafe(T blockEntity, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay) {
 		Direction direction = blockEntity.getLaserDirection();
 		double distance = Math.ceil(blockEntity.getLaserHitDistance());
-		double thickness = (blockEntity.getLaserStrength() / 100) + 0.5; // Adjust thickness based on preference
+		double thickness = (blockEntity.getLaserStrength() / 200) + 0.25; // Adjust thickness based on preference
 		boolean active = blockEntity.getActive();
 
 		if (active) {
@@ -57,6 +58,7 @@ public class LaserHoldingRenderer<T extends LaserHoldingBlockEntity> extends Kin
 		matrices.multiply(direction.getRotationQuaternion());
 
 		// crappy way to do it and frainkly i dont care
+		//doesnt even work lmao
 		if (invert) {
 			// Front face (inverted)
 			renderBeamVertex(matrices, vertexConsumer, n, 0, p, 0, 1);
