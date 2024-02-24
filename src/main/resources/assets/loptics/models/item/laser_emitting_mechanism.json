@@ -1,0 +1,6 @@
+{
+	"parent": "item/generated",
+	"textures": {
+		"layer0": "loptics:item/laser_emitting_mechanism"
+	}
+}
