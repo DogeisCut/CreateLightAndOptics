@@ -3,6 +3,7 @@ package com.dogeiscut.loptics.content.optics;
 import com.dogeiscut.loptics.content.optics.laserEmitter.LaserEmitterBlockEntity;
 import com.dogeiscut.loptics.content.optics.laserRedirector.LaserRedirectorBlockEntity;
 import com.simibubi.create.content.equipment.goggles.IHaveGoggleInformation;
+import com.simibubi.create.content.kinetics.base.IRotate;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
 
 import com.simibubi.create.foundation.utility.Components;
@@ -190,7 +191,10 @@ public class LaserHoldingBlockEntity extends KineticBlockEntity implements IHave
 	}
 
 	public boolean addToGoggleTooltip(List<Text> tooltip, boolean isPlayerSneaking) {
-			Lang.translate("tooltip.laser.strength", getLaserStrength())
+
+			super.addToGoggleTooltip(tooltip, isPlayerSneaking);
+
+			Lang.translate("tooltip.laser.strength", getLaserStrength()*1000)
 					.style(Formatting.GREEN)
 					.forGoggles(tooltip);
 

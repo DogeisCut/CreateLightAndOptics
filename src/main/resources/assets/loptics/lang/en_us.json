@@ -4,5 +4,8 @@
   "block.loptics.laser_receiver": "Laser Receiver",
   "block.loptics.pixel_screen": "Pixel Screen",
 
-  "item.loptics.laser_emitting_mechanism": "Laser Emitting Mechanism"
+  "item.loptics.laser_emitting_mechanism": "Laser Emitting Mechanism",
+
+  "create.tooltip.laser.strength": "Laser Strength: %1$s hardness milliunits",
+  "create.tooltip.laser.distance": "Laser distance: %1$s blocks"
 }

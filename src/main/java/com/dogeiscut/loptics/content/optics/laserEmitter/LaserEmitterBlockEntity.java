@@ -33,6 +33,6 @@ public class LaserEmitterBlockEntity extends LaserHoldingBlockEntity {
 		super.lazyTick();
 		setActive(getSpeed() != 0);
 		setLaserDistance(Math.abs(getSpeed())/4d);
-		setLaserStrength(Math.max(Math.abs(getSpeed())/10d, 1d));
+		setLaserStrength(Math.abs(getSpeed())/1000d);
 	}
 }
