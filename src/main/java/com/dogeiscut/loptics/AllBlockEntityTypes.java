@@ -4,6 +4,7 @@ import com.dogeiscut.loptics.content.optics.laserEmitter.LaserEmitterBlockEntity
 import com.dogeiscut.loptics.content.optics.laserEmitter.LaserEmitterCogInstance;
 import com.dogeiscut.loptics.content.optics.laserEmitter.LaserEmitterRenderer;
 import com.dogeiscut.loptics.content.optics.laserRedirector.LaserRedirectorBlockEntity;
+import com.dogeiscut.loptics.content.optics.laserRedirector.LaserRedirectorRenderer;
 import com.tterrag.registrate.util.entry.BlockEntityEntry;
 
 import static com.dogeiscut.loptics.LightAndOptics.REGISTRATE;
