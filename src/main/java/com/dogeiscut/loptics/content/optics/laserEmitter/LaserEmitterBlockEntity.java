@@ -24,13 +24,8 @@ public class LaserEmitterBlockEntity extends LaserHoldingBlockEntity {
 	@Override
 	public void lazyTick() {
 		super.lazyTick();
-		if (world.isClient)
-			return;
-		if (getSpeed() == 0)
-			return;
+		setActive(getSpeed() != 0);
 		setLaserDistance(Math.abs(getSpeed())/4d);
 		setLaserStrength(Math.max(Math.abs(getSpeed())/10d, 1d));
-		BlockPos hitBlock = raycastLaser();
-		laserInteractions(hitBlock);
 	}
 }
