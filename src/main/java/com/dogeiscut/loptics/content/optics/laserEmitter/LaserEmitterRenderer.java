@@ -23,6 +23,8 @@ import net.minecraft.util.math.Direction;
 
 import net.minecraft.util.math.MathHelper;
 
+import net.minecraft.util.math.RotationAxis;
+
 import org.joml.Matrix4f;
 
 @Environment(EnvType.CLIENT)
@@ -42,40 +44,61 @@ public class LaserEmitterRenderer extends KineticBlockEntityRenderer<LaserEmitte
 		BlockPos pos = blockEntity.getPos();
 		Direction direction = blockEntity.getLaserDirection();
 		double distance = blockEntity.getLaserDistance();
-		double thickness = blockEntity.getLaserStrength() * 0.1; // Adjust thickness based on preference
+		double thickness = blockEntity.getLaserStrength(); // Adjust thickness based on preference
 
-		renderBeamLayer(matrices, vertexConsumers, new float[]{1f, 1f, 1f});
+		drawLaser(matrices, vertexConsumers.getBuffer(RenderLayer.getCutoutMipped()), direction, distance, thickness);
 	}
 
-	private static void renderBeamLayer(MatrixStack matrices, VertexConsumerProvider vertexConsumers, float[] color) {
+	private void drawLaser(MatrixStack matrices, VertexConsumer vertexConsumer, Direction direction, double laserDist, double laserThickness) {
+
+		float size = ((float) laserThickness);
+
+		float p = size / 2;
+		float n = -size / 2;
+
+		float dist = ((float) laserDist) + 0.5f;
+
 		matrices.push();
-		matrices.translate(0.5D, 0.0D, 0.5D);
+		matrices.translate(0.5, 0.5, 0.5);
+		matrices.multiply(direction.getRotationQuaternion());
+		// Front face
+		renderBeamVertex(matrices, vertexConsumer, n, 0, p, 0, 0);
+		renderBeamVertex(matrices, vertexConsumer, p, 0, p, 1, 0);
+		renderBeamVertex(matrices, vertexConsumer, p, dist, p, 1, 1);
+		renderBeamVertex(matrices, vertexConsumer, n, dist, p, 0, 1);
 
-		float r = color[0];
-		float g = color[1];
-		float b = color[2];
+		// Right face
+		renderBeamVertex(matrices, vertexConsumer, p, 0, p, 0, 0);
+		renderBeamVertex(matrices, vertexConsumer, p, 0, n, 1, 0);
+		renderBeamVertex(matrices, vertexConsumer, p, dist, n, 1, 1);
+		renderBeamVertex(matrices, vertexConsumer, p, dist, p, 0, 1);
 
-		int yOffset = 0;
+		// Back face
+		renderBeamVertex(matrices, vertexConsumer, p, 0, n, 0, 0);
+		renderBeamVertex(matrices, vertexConsumer, n, 0, n, 1, 0);
+		renderBeamVertex(matrices, vertexConsumer, n, dist, n, 1, 1);
+		renderBeamVertex(matrices, vertexConsumer, p, dist, n, 0, 1);
 
-		int dist = 600;
+		// Left face
+		renderBeamVertex(matrices, vertexConsumer, n, 0, n, 0, 0);
+		renderBeamVertex(matrices, vertexConsumer, n, 0, p, 1, 0);
+		renderBeamVertex(matrices, vertexConsumer, n, dist, p, 1, 1);
+		renderBeamVertex(matrices, vertexConsumer, n, dist, n, 0, 1);
 
-		renderBeamFace(matrices, vertexConsumers.getBuffer(RenderLayer.getCutoutMipped()), r, g, b, 1.0F, yOffset, dist, 0.0F, 0.2F, 0.25F, 0.0F, 0.0F, 0.0F, 0.5f, 0.5f);
-
+		// Top face
+		renderBeamVertex(matrices, vertexConsumer, n, dist, n, 0, 0);
+		renderBeamVertex(matrices, vertexConsumer, n, dist, p, 0, 1);
+		renderBeamVertex(matrices, vertexConsumer, p, dist, p, 1, 1);
+		renderBeamVertex(matrices, vertexConsumer, p, dist, n, 1, 0);
 		matrices.pop();
 	}
 
-	private static void renderBeamFace(MatrixStack matrices, VertexConsumer vertices, float red, float green, float blue, float alpha, int yOffset, int height, float u1, float v1, float u2, float v2, float x1, float z1, float x2, float z2) {
-		renderBeamVertex(matrices, vertices, red, green, blue, alpha, height, x1, z1, u2, v1);
-		renderBeamVertex(matrices, vertices, red, green, blue, alpha, yOffset, x1, z1, u2, v2);
-		renderBeamVertex(matrices, vertices, red, green, blue, alpha, yOffset, x2, z2, u1, v2);
-		renderBeamVertex(matrices, vertices, red, green, blue, alpha, height, x2, z2, u1, v1);
-	}
 
-	private static void renderBeamVertex(MatrixStack matrices, VertexConsumer vertices, float red, float green, float blue, float alpha, int y, float x, float z, float u, float v) {
+	private static void renderBeamVertex(MatrixStack matrices, VertexConsumer vertices,float x, float y, float z, float u, float v) {
 		matrices.push();
 		matrices.translate(x, y, z);
 		vertices.vertex(matrices.peek().getPositionMatrix(), 0.0F, 0.0F, 0.0F)
-				.color(red, green, blue, alpha)
+				.color(1.0f, 1.0f, 1.0f, 1.0f)
 				.texture(u, v)
 				.overlay(OverlayTexture.DEFAULT_UV)
 				.light(15728880)
