@@ -26,6 +26,8 @@ import net.minecraft.util.math.MathHelper;
 
 import net.minecraft.util.math.RotationAxis;
 
+import net.minecraft.util.math.Vec3d;
+
 import org.joml.Matrix4f;
 
 @Environment(EnvType.CLIENT)
@@ -142,8 +144,15 @@ public class LaserEmitterRenderer extends KineticBlockEntityRenderer<LaserEmitte
 		matrices.pop();
 	}
 
-	@Override
 	public boolean rendersOutsideBoundingBox(LaserEmitterBlockEntity laserEmitterBlockEntity) {
 		return true;
+	}
+
+	public int getRenderDistance() {
+		return 256;
+	}
+
+	public boolean isInRenderDistance(LaserEmitterBlockEntity laserEmitterBlockEntity, Vec3d vec3d) {
+		return Vec3d.ofCenter(laserEmitterBlockEntity.getPos()).multiply(1.0D, 0.0D, 1.0D).isInRange(vec3d.multiply(1.0D, 0.0D, 1.0D), (double)this.getRenderDistance());
 	}
 }
