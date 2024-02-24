@@ -28,8 +28,8 @@ public class LaserEmitterBlockEntity extends LaserHoldingBlockEntity {
 			return;
 		if (getSpeed() == 0)
 			return;
-		setLaserDistance(getSpeed()/4d);
-		setLaserStrength(Math.max(getSpeed()/10d, 1d));
+		setLaserDistance(Math.abs(getSpeed())/4d);
+		setLaserStrength(Math.max(Math.abs(getSpeed())/10d, 1d));
 		BlockPos hitBlock = raycastLaser();
 		laserInteractions(hitBlock);
 	}
