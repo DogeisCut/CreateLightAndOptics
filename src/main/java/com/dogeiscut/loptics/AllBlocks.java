@@ -1,6 +1,7 @@
 package com.dogeiscut.loptics;
 
 import com.dogeiscut.loptics.content.optics.laserEmitter.LaserEmitterBlock;
+import com.dogeiscut.loptics.content.optics.laserRedirector.LaserRedirectorBlock;
 import com.simibubi.create.content.kinetics.BlockStressDefaults;
 import com.simibubi.create.content.kinetics.crafter.CrafterCTBehaviour;
 import com.simibubi.create.foundation.data.AssetLookup;
@@ -16,6 +17,7 @@ import net.minecraft.client.render.RenderLayer;
 import static com.dogeiscut.loptics.LightAndOptics.REGISTRATE;
 import static com.simibubi.create.foundation.data.ModelGen.customItemModel;
 import static com.simibubi.create.foundation.data.TagGen.axeOrPickaxe;
+import static com.simibubi.create.foundation.data.TagGen.pickaxeOnly;
 
 public class AllBlocks {
 	static {
@@ -30,6 +32,18 @@ public class AllBlocks {
 					.transform(axeOrPickaxe())
 					.blockstate(BlockStateGen.directionalBlockProviderIgnoresWaterlogged(true))
 					.transform(BlockStressDefaults.setImpact(5.0))
+					.addLayer(() -> RenderLayer::getCutoutMipped)
+					.item()
+					.transform(customItemModel())
+					.register();
+
+	public static final BlockEntry<LaserRedirectorBlock> LASER_REDIRECTOR =
+			REGISTRATE.block("laser_redirector", LaserRedirectorBlock::new)
+					.initialProperties(SharedProperties::softMetal)
+					.properties(p -> p.mapColor(MapColor.LIGHT_BLUE_GRAY))
+					.properties(AbstractBlock.Settings::nonOpaque)
+					.transform(pickaxeOnly())
+					.blockstate(BlockStateGen.directionalBlockProviderIgnoresWaterlogged(true))
 					.addLayer(() -> RenderLayer::getCutoutMipped)
 					.item()
 					.transform(customItemModel())

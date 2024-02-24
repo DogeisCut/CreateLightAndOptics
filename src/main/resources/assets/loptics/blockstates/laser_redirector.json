@@ -1,0 +1,30 @@
+{
+  "variants": {
+    "facing=down": {
+      "model": "loptics:block/laser_redirector/block",
+      "x": 180
+    },
+    "facing=up": {
+      "model": "loptics:block/laser_redirector/block"
+    },
+    "facing=north": {
+      "model": "loptics:block/laser_redirector/block",
+      "x": 90
+    },
+    "facing=south": {
+      "model": "loptics:block/laser_redirector/block",
+      "x": 90,
+      "y": 180
+    },
+    "facing=west": {
+      "model": "loptics:block/laser_redirector/block",
+      "x": 90,
+      "y": 270
+    },
+    "facing=east": {
+      "model": "loptics:block/laser_redirector/block",
+      "x": 90,
+      "y": 90
+    }
+  }
+}

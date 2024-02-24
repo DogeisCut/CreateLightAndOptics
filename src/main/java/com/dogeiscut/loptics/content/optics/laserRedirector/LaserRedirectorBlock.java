@@ -1,13 +1,12 @@
-package com.dogeiscut.loptics.content.optics.laserEmitter;
+package com.dogeiscut.loptics.content.optics.laserRedirector;
 
 import com.dogeiscut.loptics.AllBlockEntityTypes;
+import com.dogeiscut.loptics.content.optics.laserEmitter.LaserEmitterBlockEntity;
 import com.simibubi.create.content.kinetics.base.DirectionalKineticBlock;
+
 import com.simibubi.create.content.kinetics.simpleRelays.ICogWheel;
-
 import com.simibubi.create.foundation.block.IBE;
-
 import com.simibubi.create.foundation.block.ProperWaterloggedBlock;
-
 import com.simibubi.create.foundation.utility.Iterate;
 
 import net.minecraft.block.Block;
@@ -27,9 +26,8 @@ import net.minecraft.world.WorldView;
 
 import java.util.Objects;
 
-
-public class LaserEmitterBlock extends DirectionalKineticBlock implements Waterloggable, IBE<LaserEmitterBlockEntity>, ICogWheel {
-	public LaserEmitterBlock(Settings settings) {
+public class LaserRedirectorBlock extends DirectionalKineticBlock implements Waterloggable, IBE<LaserRedirectorBlockEntity>, ICogWheel {
+	public LaserRedirectorBlock(Settings settings) {
 		super(settings);
 		this.setDefaultState(super.getDefaultState().with(Properties.WATERLOGGED, false));
 	}
@@ -59,8 +57,8 @@ public class LaserEmitterBlock extends DirectionalKineticBlock implements Waterl
 	}
 
 	@Override
-	public Class<LaserEmitterBlockEntity> getBlockEntityClass() {
-		return LaserEmitterBlockEntity.class;
+	public Class<LaserRedirectorBlockEntity> getBlockEntityClass() {
+		return LaserRedirectorBlockEntity.class;
 	}
 
 	@Override
@@ -104,7 +102,7 @@ public class LaserEmitterBlock extends DirectionalKineticBlock implements Waterl
 	}
 
 	@Override
-	public BlockEntityType<? extends LaserEmitterBlockEntity> getBlockEntityType() {
-		return AllBlockEntityTypes.LASER_EMITTER.get();
+	public BlockEntityType<? extends LaserRedirectorBlockEntity> getBlockEntityType() {
+		return AllBlockEntityTypes.LASER_REDIRECTOR.get();
 	}
 }
