@@ -8,9 +8,12 @@ import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
 import com.simibubi.create.foundation.utility.Components;
 import com.simibubi.create.foundation.utility.Lang;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.state.property.Properties;
 import net.minecraft.text.Text;
@@ -41,6 +44,18 @@ public class LaserHoldingBlockEntity extends KineticBlockEntity implements IHave
 		laserHitDistance = 0.0;
 		laserStrength = 0.0;
 		setLazyTickRate(1);
+	}
+
+	protected ItemStack getOverheatItemStack() {
+		// Default implementation, override in subclasses
+		return new ItemStack(Items.STONE);
+	}
+
+	private void overheat() {
+		if (world != null && !world.isClient) {
+			Block.dropStack(world, pos, getOverheatItemStack());
+			world.breakBlock(pos, false);
+		}
 	}
 
 	public Boolean getActive() {
@@ -113,12 +128,14 @@ public class LaserHoldingBlockEntity extends KineticBlockEntity implements IHave
 
 	protected void findAndUpdateSurroundingLaserHolders() {
 		double maxDistance = 64.0;
-		recursionValue = 0;
 
 		if (world == null) return;
 		for (Direction direction : Direction.values()) {
+			recursionValue = 0;
 			BlockHitResult hitResult = raycastLaser(direction, maxDistance);
-
+			if (hitResult == null) {
+				continue;
+			}
 			if (hitResult.getType() == BlockHitResult.Type.BLOCK) {
 				BlockPos hitPos = hitResult.getBlockPos();
 				BlockEntity neighborBlockEntity = world.getBlockEntity(hitPos);
@@ -135,7 +152,12 @@ public class LaserHoldingBlockEntity extends KineticBlockEntity implements IHave
 		setLaserHitDistance(hitBlock.toCenterPos().distanceTo(pos.toCenterPos()));
 		if (world == null) return;
 		BlockEntity blockEntity = world.getBlockEntity(hitBlock);
+		if (blockEntity == null) {
+			recursionValue = 0;
+			return;
+		}
 		if (recursionValue > 64) {
+			overheat();
 			return;
 		}
 		if (blockEntity instanceof LaserRedirectorBlockEntity) {

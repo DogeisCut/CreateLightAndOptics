@@ -28,7 +28,7 @@ public class LightAndOptics implements ModInitializer {
 		//AllTags.init();
 		AllCreativeModeTabs.init();
 		AllBlocks.register();
-		//AllItems.register();
+		AllItems.register();
 		//AllFluids.register();
 		//AllPaletteBlocks.register();
 		//AllMenuTypes.register();

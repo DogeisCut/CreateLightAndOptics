@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "create:electron_tube"
+    },
+    {
+      "item": "create:precision_mechanism"
+    },
+    {
+      "item": "create:iron_sheet"
+    },
+    {
+      "item": "create:electron_tube"
+    },
+    {
+      "item": "minecraft:glass"
+    },
+    {
+      "item": "minecraft:redstone"
+    }
+  ],
+  "result": {
+    "item": "loptics:laser_emitting_mechanism",
+    "count": 2
+  }
+}

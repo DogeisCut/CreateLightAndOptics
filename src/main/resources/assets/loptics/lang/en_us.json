@@ -1,0 +1,8 @@
+{
+  "block.loptics.laser_emitter": "Laser Emitter",
+  "block.loptics.laser_redirector": "Laser Redirector",
+  "block.loptics.laser_receiver": "Laser Receiver",
+  "block.loptics.pixel_screen": "Pixel Screen",
+
+  "item.loptics.laser_emitting_mechanism": "Laser Emitting Mechanism"
+}

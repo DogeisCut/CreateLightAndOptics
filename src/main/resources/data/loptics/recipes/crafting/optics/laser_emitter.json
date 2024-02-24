@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " # ",
+    "CLC",
+    " O "
+  ],
+  "key": {
+    "#": {
+      "item": "minecraft:glass_pane"
+    },
+    "C": {
+      "item": "create:cogwheel"
+    },
+    "L": {
+      "item": "loptics:laser_emitting_mechanism"
+    },
+    "O": {
+      "item": "create:brass_casing"
+    }
+  },
+  "result": {
+    "item": "loptics:laser_emitter",
+    "count": 1
+  }
+}
