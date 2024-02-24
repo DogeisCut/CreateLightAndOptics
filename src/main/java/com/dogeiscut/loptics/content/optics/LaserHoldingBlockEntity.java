@@ -1,6 +1,7 @@
 package com.dogeiscut.loptics.content.optics;
 
 import com.dogeiscut.loptics.content.optics.laserEmitter.LaserEmitterBlockEntity;
+import com.dogeiscut.loptics.content.optics.laserRedirector.LaserRedirectorBlockEntity;
 import com.simibubi.create.content.equipment.goggles.IHaveGoggleInformation;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
 
@@ -19,6 +20,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.RaycastContext;
+import net.minecraft.world.World;
 
 import java.util.List;
 
@@ -29,14 +31,16 @@ public class LaserHoldingBlockEntity extends KineticBlockEntity implements IHave
 	private double laserHitDistance;
 	private double laserStrength;
 
+	public int recursionValue = 0;
+
 	public LaserHoldingBlockEntity(BlockEntityType<?> typeIn, BlockPos pos, BlockState state) {
 		super(typeIn, pos, state);
 		active = false;
 		laserDirection = state.get(Properties.FACING);
-		laserDistance = 10.0;
-		laserHitDistance = 10.0;
-		laserStrength = 0.5;
-		setLazyTickRate(3);
+		laserDistance = 0.0;
+		laserHitDistance = 0.0;
+		laserStrength = 0.0;
+		setLazyTickRate(1);
 	}
 
 	public Boolean getActive() {
@@ -96,36 +100,67 @@ public class LaserHoldingBlockEntity extends KineticBlockEntity implements IHave
 			return;
 		if (!getActive())
 			return;
+		recursionValue = 0;
 		raycastLaserCheck();
 	}
 
+	@Override
+	public void markDirty() {
+		super.markDirty();
+		recursionValue = 0;
+		findAndUpdateSurroundingLaserHolders();
+	}
+
+	protected void findAndUpdateSurroundingLaserHolders() {
+		double maxDistance = 64.0;
+		recursionValue = 0;
+
+		if (world == null) return;
+		for (Direction direction : Direction.values()) {
+			BlockHitResult hitResult = raycastLaser(direction, maxDistance);
+
+			if (hitResult.getType() == BlockHitResult.Type.BLOCK) {
+				BlockPos hitPos = hitResult.getBlockPos();
+				BlockEntity neighborBlockEntity = world.getBlockEntity(hitPos);
+
+				if (neighborBlockEntity instanceof LaserHoldingBlockEntity) {
+					((LaserHoldingBlockEntity) neighborBlockEntity).raycastLaserCheck();
+				}
+			}
+		}
+	}
+
 	protected void raycastLaserCheck() {
-		BlockPos hitBlock = raycastLaser().getBlockPos();
+		BlockPos hitBlock = raycastLaser(getLaserDirection(), laserDistance).getBlockPos();
 		setLaserHitDistance(hitBlock.toCenterPos().distanceTo(pos.toCenterPos()));
 		if (world == null) return;
 		BlockEntity blockEntity = world.getBlockEntity(hitBlock);
-		if (blockEntity instanceof LaserEmitterBlockEntity) {
-			((LaserEmitterBlockEntity) blockEntity).setActive(true);
-			((LaserEmitterBlockEntity) blockEntity).setLaserStrength(getLaserStrength());
-			((LaserEmitterBlockEntity) blockEntity).setLaserDistance(getLaserDistance()-getLaserHitDistance());
-			((LaserEmitterBlockEntity) blockEntity).notifyUpdate(); //todo: do this but actually good
+		if (recursionValue > 64) {
+			return;
+		}
+		if (blockEntity instanceof LaserRedirectorBlockEntity) {
+			((LaserRedirectorBlockEntity) blockEntity).setActive(true);
+			((LaserRedirectorBlockEntity) blockEntity).setLaserStrength(getLaserStrength());
+			((LaserRedirectorBlockEntity) blockEntity).setLaserDistance(getLaserDistance()-getLaserHitDistance());
+			((LaserRedirectorBlockEntity) blockEntity).recursionValue += 1;
+			((LaserRedirectorBlockEntity) blockEntity).raycastLaserCheck();
 		};
 	}
 
-	protected BlockHitResult raycastLaser() {
-		double maxDistance = laserDistance;
+	protected BlockHitResult raycastLaser(Direction direction, double distance) {
+		double maxDistance = getLaserDistance();
 		Vec3d start = new Vec3d(
 				pos.getX() + 0.5,
 				pos.getY() + 0.5,
 				pos.getZ() + 0.5).add(
-				laserDirection.getOffsetX()*0.5,
-				laserDirection.getOffsetY()*0.5,
-				laserDirection.getOffsetZ()*0.5
+				direction.getOffsetX()*0.5,
+				direction.getOffsetY()*0.5,
+				direction.getOffsetZ()*0.5
 		);
 		Vec3d end = start.add(
-				laserDirection.getOffsetX() * maxDistance,
-				laserDirection.getOffsetY() * maxDistance,
-				laserDirection.getOffsetZ() * maxDistance);
+				direction.getOffsetX() * maxDistance,
+				direction.getOffsetY() * maxDistance,
+				direction.getOffsetZ() * maxDistance);
 
 		BlockHitResult result = world.raycast(new RaycastContext(start, end, RaycastContext.ShapeType.OUTLINE, RaycastContext.FluidHandling.NONE, null));
 
