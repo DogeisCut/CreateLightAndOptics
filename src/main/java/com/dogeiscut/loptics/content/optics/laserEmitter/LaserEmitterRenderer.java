@@ -10,6 +10,7 @@ import com.simibubi.create.foundation.render.SuperByteBuffer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.entity.BeaconBlockEntity;
 import net.minecraft.client.render.OverlayTexture;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.VertexConsumer;
@@ -41,10 +42,9 @@ public class LaserEmitterRenderer extends KineticBlockEntityRenderer<LaserEmitte
 
 	@Override
 	public void renderSafe(LaserEmitterBlockEntity blockEntity, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay) {
-		BlockPos pos = blockEntity.getPos();
 		Direction direction = blockEntity.getLaserDirection();
-		double distance = blockEntity.getLaserDistance();
-		double thickness = blockEntity.getLaserStrength(); // Adjust thickness based on preference
+		double distance = Math.ceil(blockEntity.getLaserDistance());
+		double thickness = (blockEntity.getLaserStrength()/100)+0.5; // Adjust thickness based on preference
 
 		drawLaser(matrices, vertexConsumers.getBuffer(RenderLayer.getCutoutMipped()), direction, distance, thickness, false);
 		drawLaser(matrices, vertexConsumers.getBuffer(RenderLayer.getCutoutMipped()), direction, distance, thickness+0.1, true);
@@ -57,7 +57,7 @@ public class LaserEmitterRenderer extends KineticBlockEntityRenderer<LaserEmitte
 		float p = size / 2;
 		float n = -size / 2;
 
-		float dist = ((float) laserDist) + 0.5f;
+		float dist = ((float) laserDist);
 
 		matrices.push();
 		matrices.translate(0.5, 0.5, 0.5);
@@ -142,4 +142,8 @@ public class LaserEmitterRenderer extends KineticBlockEntityRenderer<LaserEmitte
 		matrices.pop();
 	}
 
+	@Override
+	public boolean rendersOutsideBoundingBox(LaserEmitterBlockEntity laserEmitterBlockEntity) {
+		return true;
+	}
 }
