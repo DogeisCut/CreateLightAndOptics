@@ -12,6 +12,7 @@ import com.simibubi.create.foundation.utility.Iterate;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.ShapeContext;
 import net.minecraft.block.Waterloggable;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;
@@ -22,6 +23,9 @@ import net.minecraft.state.property.Properties;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.shape.VoxelShape;
+import net.minecraft.util.shape.VoxelShapes;
+import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldView;
 
@@ -39,6 +43,15 @@ public class LaserEmitterBlock extends DirectionalKineticBlock implements Waterl
 		return originalState.with(FACING, originalState.get(FACING)
 				.getOpposite());
 	}
+
+//	@Override
+//	public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
+//		VoxelShape shape = VoxelShapes.empty();
+//		shape = VoxelShapes.union(shape, VoxelShapes.cuboid(0, 0, 0, 1, 0.875, 1));
+//		shape = VoxelShapes.union(shape, VoxelShapes.cuboid(0.0625, 0.875, 0.0625, 0.9375, 0.9375, 0.9375));
+//		shape = VoxelShapes.union(shape, VoxelShapes.cuboid(0.1875, 0.9375, 0.1875, 0.8125, 1, 0.8125));
+//		return shape;
+//	}
 
 	@Override
 	protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {

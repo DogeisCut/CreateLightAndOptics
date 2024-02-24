@@ -11,6 +11,7 @@ import com.simibubi.create.foundation.data.SharedProperties;
 import com.tterrag.registrate.util.entry.BlockEntry;
 
 import net.minecraft.block.AbstractBlock;
+import net.minecraft.block.Blocks;
 import net.minecraft.block.MapColor;
 import net.minecraft.client.render.RenderLayer;
 
@@ -39,7 +40,7 @@ public class AllBlocks {
 
 	public static final BlockEntry<LaserRedirectorBlock> LASER_REDIRECTOR =
 			REGISTRATE.block("laser_redirector", LaserRedirectorBlock::new)
-					.initialProperties(SharedProperties::softMetal)
+					.initialProperties(() -> Blocks.TINTED_GLASS)
 					.properties(p -> p.mapColor(MapColor.LIGHT_BLUE_GRAY))
 					.properties(AbstractBlock.Settings::nonOpaque)
 					.transform(pickaxeOnly())

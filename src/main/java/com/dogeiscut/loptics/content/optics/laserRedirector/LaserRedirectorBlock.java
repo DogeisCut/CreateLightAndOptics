@@ -16,6 +16,7 @@ import com.simibubi.create.foundation.utility.Iterate;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.ShapeContext;
 import net.minecraft.block.Waterloggable;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;
@@ -27,6 +28,9 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.shape.VoxelShape;
+import net.minecraft.util.shape.VoxelShapes;
+import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldView;
 
@@ -55,6 +59,25 @@ public class LaserRedirectorBlock extends WrenchableDirectionalBlock implements 
 		((LaserEmitterBlockEntity) Objects.requireNonNull(context.getWorld().getBlockEntity(context.getBlockPos()))).setLaserDirection(newState.get(FACING));
 		return super.updateAfterWrenched(newState, context);
 	}
+
+//	@Override
+//	public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
+//		VoxelShape shape = VoxelShapes.empty();
+//		shape = VoxelShapes.union(shape, VoxelShapes.cuboid(0, 0, 0, 1, 0.125, 0.125));
+//		shape = VoxelShapes.union(shape, VoxelShapes.cuboid(0, 0, 0.875, 1, 0.125, 1));
+//		shape = VoxelShapes.union(shape, VoxelShapes.cuboid(0, 0.125, 0.875, 0.125, 0.875, 1));
+//		shape = VoxelShapes.union(shape, VoxelShapes.cuboid(0.875, 0.125, 0.875, 1, 0.875, 1));
+//		shape = VoxelShapes.union(shape, VoxelShapes.cuboid(0.875, 0.125, 0, 1, 0.875, 0.125));
+//		shape = VoxelShapes.union(shape, VoxelShapes.cuboid(0, 0.125, 0, 0.125, 0.875, 0.125));
+//		shape = VoxelShapes.union(shape, VoxelShapes.cuboid(0, 0.875, 0.875, 1, 1, 1));
+//		shape = VoxelShapes.union(shape, VoxelShapes.cuboid(0, 0.875, 0, 1, 1, 0.125));
+//		shape = VoxelShapes.union(shape, VoxelShapes.cuboid(0.875, 0.875, 0.125, 1, 1, 0.875));
+//		shape = VoxelShapes.union(shape, VoxelShapes.cuboid(0, 0.875, 0.125, 0.125, 1, 0.875));
+//		shape = VoxelShapes.union(shape, VoxelShapes.cuboid(0, 0, 0.125, 0.125, 0.125, 0.875));
+//		shape = VoxelShapes.union(shape, VoxelShapes.cuboid(0.875, 0, 0.125, 1, 0.125, 0.875));
+//		shape = VoxelShapes.union(shape, VoxelShapes.cuboid(0.0625, 0.0625, 0.0625, 0.9375, 0.9375, 0.9375));
+//		return shape;
+//	}
 
 	@Override
 	public ActionResult onWrenched(BlockState state, ItemUsageContext context) {
