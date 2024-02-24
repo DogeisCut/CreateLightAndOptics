@@ -1,12 +1,17 @@
 package com.dogeiscut.loptics.content.optics.laserRedirector;
 
 import com.dogeiscut.loptics.AllBlockEntityTypes;
+import com.dogeiscut.loptics.AllBlocks;
 import com.dogeiscut.loptics.content.optics.laserEmitter.LaserEmitterBlockEntity;
+import com.simibubi.create.content.contraptions.elevator.ElevatorColumn;
 import com.simibubi.create.content.kinetics.base.DirectionalKineticBlock;
 
 import com.simibubi.create.content.kinetics.simpleRelays.ICogWheel;
+import com.simibubi.create.content.redstone.contact.RedstoneContactBlock;
 import com.simibubi.create.foundation.block.IBE;
 import com.simibubi.create.foundation.block.ProperWaterloggedBlock;
+import com.simibubi.create.foundation.block.WrenchableDirectionalBlock;
+import com.simibubi.create.foundation.utility.BlockHelper;
 import com.simibubi.create.foundation.utility.Iterate;
 
 import net.minecraft.block.Block;
@@ -18,6 +23,7 @@ import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemUsageContext;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.Properties;
+import net.minecraft.util.ActionResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
@@ -26,7 +32,7 @@ import net.minecraft.world.WorldView;
 
 import java.util.Objects;
 
-public class LaserRedirectorBlock extends DirectionalKineticBlock implements Waterloggable, IBE<LaserRedirectorBlockEntity>, ICogWheel {
+public class LaserRedirectorBlock extends WrenchableDirectionalBlock implements Waterloggable, IBE<LaserRedirectorBlockEntity> {
 	public LaserRedirectorBlock(Settings settings) {
 		super(settings);
 		this.setDefaultState(super.getDefaultState().with(Properties.WATERLOGGED, false));
@@ -51,9 +57,24 @@ public class LaserRedirectorBlock extends DirectionalKineticBlock implements Wat
 	}
 
 	@Override
-	public Direction.Axis getRotationAxis(BlockState state) {
-		return state.get(FACING)
-				.getAxis();
+	public ActionResult onWrenched(BlockState state, ItemUsageContext context) {
+		ActionResult onWrenched = super.onWrenched(state, context);
+		if (onWrenched != ActionResult.SUCCESS)
+			return onWrenched;
+
+		World level = context.getWorld();
+		if (level.isClient())
+			return onWrenched;
+
+		BlockPos pos = context.getBlockPos();
+		state = level.getBlockState(pos);
+		Direction facing = state.get(RedstoneContactBlock.FACING);
+		if (facing.getAxis() == Direction.Axis.Y)
+			return onWrenched;
+
+		level.setBlockState(pos, BlockHelper.copyProperties(state, AllBlocks.LASER_REDIRECTOR.getDefaultState()));
+
+		return onWrenched;
 	}
 
 	@Override
@@ -61,44 +82,19 @@ public class LaserRedirectorBlock extends DirectionalKineticBlock implements Wat
 		return LaserRedirectorBlockEntity.class;
 	}
 
-	@Override
-	public boolean hasShaftTowards(WorldView world, BlockPos pos, BlockState state, Direction face) {
-		return face == state.get(FACING).getOpposite();
-	}
 
 	@Override
 	public BlockState getPlacementState(ItemPlacementContext context) {
-		BlockState toPlace = super.getPlacementState(context);
-		World world = context.getWorld();
-		BlockPos pos = context.getBlockPos();
-		PlayerEntity player = context.getPlayer();
-		toPlace = ProperWaterloggedBlock.withWater(world, toPlace, pos);
+		BlockState state = getDefaultState().with(FACING, context.getPlayerLookDirection()
+				.getOpposite());
+		Direction placeDirection = context.getSide()
+				.getOpposite();
 
-		Direction nearestLookingDirection = context.getPlayerLookDirection();
-		Direction targetDirection = context.getPlayer() != null && context.getPlayer()
-				.isSneaking() ? nearestLookingDirection : nearestLookingDirection.getOpposite();
-		Direction bestConnectedDirection = null;
-		double bestDistance = Double.MAX_VALUE;
+		if ((context.getPlayer() != null && context.getPlayer()
+				.isSneaking()))
+			state = state.with(FACING, placeDirection);
 
-		for (Direction d : Iterate.directions) {
-			BlockPos adjPos = pos.offset(d);
-			BlockState adjState = world.getBlockState(adjPos);
-			double distance = Vec3d.of(d.getVector())
-					.distanceTo(Vec3d.of(targetDirection.getVector()));
-			if (distance > bestDistance)
-				continue;
-			bestDistance = distance;
-			bestConnectedDirection = d;
-		}
-
-		if (bestConnectedDirection == null)
-			return toPlace;
-		if (bestConnectedDirection.getAxis() == targetDirection.getAxis())
-			return toPlace;
-		if (player.isSneaking() && bestConnectedDirection.getAxis() != targetDirection.getAxis())
-			return toPlace;
-
-		return toPlace.with(FACING, bestConnectedDirection);
+		return state;
 	}
 
 	@Override

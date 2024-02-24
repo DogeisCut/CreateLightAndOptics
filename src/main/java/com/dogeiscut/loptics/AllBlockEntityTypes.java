@@ -12,7 +12,7 @@ import static com.dogeiscut.loptics.LightAndOptics.REGISTRATE;
 public class AllBlockEntityTypes {
 	public static final BlockEntityEntry<LaserEmitterBlockEntity> LASER_EMITTER = REGISTRATE
 			.blockEntity("laser_emitter", LaserEmitterBlockEntity::new)
-			.instance(() -> LaserEmitterCogInstance::new, false)
+			.instance(() -> LaserEmitterCogInstance::new)
 			.validBlocks(AllBlocks.LASER_EMITTER)
 			.renderer(() -> LaserEmitterRenderer::new)
 			.register();

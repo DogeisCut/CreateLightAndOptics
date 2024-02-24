@@ -44,7 +44,7 @@ public class LaserEmitterRenderer extends KineticBlockEntityRenderer<LaserEmitte
 		double distance = blockEntity.getLaserDistance();
 		double thickness = blockEntity.getLaserStrength() * 0.1; // Adjust thickness based on preference
 
-		renderBeamLayer(matrices, vertexConsumers, new float[]{255f, 255f, 255f});
+		renderBeamLayer(matrices, vertexConsumers, new float[]{1f, 1f, 1f});
 	}
 
 	private static void renderBeamLayer(MatrixStack matrices, VertexConsumerProvider vertexConsumers, float[] color) {
@@ -59,7 +59,7 @@ public class LaserEmitterRenderer extends KineticBlockEntityRenderer<LaserEmitte
 
 		int dist = 600;
 
-		renderBeamFace(matrices, vertexConsumers.getBuffer(RenderLayer.getSolid()), r, g, b, 1.0F, yOffset, dist, 0.0F, 0.2F, 0.25F, 0.0F, 0.0F, 0.0F, 0.5f, 0.5f);
+		renderBeamFace(matrices, vertexConsumers.getBuffer(RenderLayer.getCutoutMipped()), r, g, b, 1.0F, yOffset, dist, 0.0F, 0.2F, 0.25F, 0.0F, 0.0F, 0.0F, 0.5f, 0.5f);
 
 		matrices.pop();
 	}
