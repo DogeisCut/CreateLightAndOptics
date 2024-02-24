@@ -107,7 +107,7 @@ public class LaserHoldingBlockEntity extends KineticBlockEntity implements IHave
 		if (blockEntity instanceof LaserEmitterBlockEntity) {
 			((LaserEmitterBlockEntity) blockEntity).setActive(true);
 			((LaserEmitterBlockEntity) blockEntity).setLaserStrength(getLaserStrength());
-			((LaserEmitterBlockEntity) blockEntity).setLaserDistance(getLaserHitDistance());
+			((LaserEmitterBlockEntity) blockEntity).setLaserDistance(getLaserDistance()-getLaserHitDistance());
 		};
 	}
 
