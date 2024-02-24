@@ -43,7 +43,7 @@ public class LaserHoldingBlockEntity extends KineticBlockEntity {
 		return laserStrength;
 	}
 
-	public void setLaserStrength(Double strength) { laserDistance = strength; }
+	public void setLaserStrength(Double strength) { laserStrength = strength; }
 
 	@Override
 	public void write(NbtCompound compound, boolean clientPacket) {

@@ -59,7 +59,6 @@ public class LaserEmitterRenderer extends KineticBlockEntityRenderer<LaserEmitte
 
 		float dist = ((float) laserDist) + 0.5f;
 
-
 		matrices.push();
 		matrices.translate(0.5, 0.5, 0.5);
 		matrices.multiply(direction.getRotationQuaternion());
