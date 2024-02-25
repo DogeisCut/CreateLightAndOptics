@@ -32,10 +32,10 @@ import net.minecraft.world.WorldView;
 import java.util.Objects;
 
 
-public class LaserEmitterBlock extends DirectionalKineticBlock implements Waterloggable, IBE<LaserEmitterBlockEntity>, ICogWheel {
+public class LaserEmitterBlock extends DirectionalKineticBlock implements IBE<LaserEmitterBlockEntity>, ICogWheel {
 	public LaserEmitterBlock(Settings settings) {
 		super(settings);
-		this.setDefaultState(super.getDefaultState().with(Properties.WATERLOGGED, false));
+		this.setDefaultState(super.getDefaultState()/*.with(Properties.WATERLOGGED, false)*/);
 	}
 
 	@Override
@@ -55,7 +55,7 @@ public class LaserEmitterBlock extends DirectionalKineticBlock implements Waterl
 
 	@Override
 	protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
-		builder.add(Properties.WATERLOGGED);
+		//builder.add(Properties.WATERLOGGED);
 		super.appendProperties(builder);
 	}
 
@@ -87,7 +87,7 @@ public class LaserEmitterBlock extends DirectionalKineticBlock implements Waterl
 		World world = context.getWorld();
 		BlockPos pos = context.getBlockPos();
 		PlayerEntity player = context.getPlayer();
-		toPlace = ProperWaterloggedBlock.withWater(world, toPlace, pos);
+		//toPlace = ProperWaterloggedBlock.withWater(world, toPlace, pos);
 
 		Direction nearestLookingDirection = context.getPlayerLookDirection();
 		Direction targetDirection = context.getPlayer() != null && context.getPlayer()

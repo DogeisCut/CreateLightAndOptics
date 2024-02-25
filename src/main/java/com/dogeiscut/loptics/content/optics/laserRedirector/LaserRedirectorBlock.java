@@ -36,10 +36,10 @@ import net.minecraft.world.WorldView;
 
 import java.util.Objects;
 
-public class LaserRedirectorBlock extends WrenchableDirectionalBlock implements Waterloggable, IBE<LaserRedirectorBlockEntity> {
+public class LaserRedirectorBlock extends WrenchableDirectionalBlock implements IBE<LaserRedirectorBlockEntity> {
 	public LaserRedirectorBlock(Settings settings) {
 		super(settings);
-		this.setDefaultState(super.getDefaultState().with(Properties.WATERLOGGED, false));
+		this.setDefaultState(super.getDefaultState()/*.with(Properties.WATERLOGGED, false)*/);
 	}
 
 	@Override
@@ -50,7 +50,7 @@ public class LaserRedirectorBlock extends WrenchableDirectionalBlock implements 
 
 	@Override
 	protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
-		builder.add(Properties.WATERLOGGED);
+		//builder.add(Properties.WATERLOGGED);
 		super.appendProperties(builder);
 	}
 

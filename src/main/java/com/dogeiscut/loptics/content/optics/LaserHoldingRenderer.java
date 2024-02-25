@@ -23,7 +23,7 @@ public class LaserHoldingRenderer<T extends LaserHoldingBlockEntity> extends Kin
 		//todo: somehow figure out how to render this as a solid color instead of being textured.
 		vertices.vertex(matrices.peek().getPositionMatrix(), 0.0F, 0.0F, 0.0F)
 				.color(1.0f, 1.0f, 1.0f, 1.0f)
-				.texture(0, 0)
+				.texture(u, v)
 				.overlay(OverlayTexture.DEFAULT_UV)
 				.light(15728880)
 				.normal(0.0F, 1.0F, 0.0F)
@@ -35,7 +35,7 @@ public class LaserHoldingRenderer<T extends LaserHoldingBlockEntity> extends Kin
 	public void renderSafe(T blockEntity, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay) {
 		Direction direction = blockEntity.getLaserDirection();
 		double distance = Math.ceil(blockEntity.getLaserHitDistance());
-		double thickness = (blockEntity.getLaserStrength() / 200) + 0.25; // Adjust thickness based on preference
+		double thickness = (blockEntity.getLaserStrength() / 200) + 0.1;
 		boolean active = blockEntity.getActive();
 
 		if (active) {
