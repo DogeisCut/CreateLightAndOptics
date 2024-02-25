@@ -6,6 +6,8 @@ import net.minecraft.client.render.OverlayTexture;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.VertexConsumerProvider;
+import net.minecraft.client.render.VertexFormat;
+import net.minecraft.client.render.VertexFormats;
 import net.minecraft.client.render.block.entity.BlockEntityRendererFactory;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.Direction;
@@ -17,12 +19,12 @@ public class LaserHoldingRenderer<T extends LaserHoldingBlockEntity> extends Kin
 		super(context);
 	}
 
-	private static void renderBeamVertex(MatrixStack matrices, VertexConsumer vertices, float x, float y, float z, float u, float v) {
+	private static void renderBeamVertex(MatrixStack matrices, VertexConsumer vertices, float x, float y, float z, float u, float v, float r, float g, float b, float a) {
 		matrices.push();
 		matrices.translate(x, y, z);
 		//todo: somehow figure out how to render this as a solid color instead of being textured.
 		vertices.vertex(matrices.peek().getPositionMatrix(), 0.0F, 0.0F, 0.0F)
-				.color(1.0f, 1.0f, 1.0f, 1.0f)
+				.color(r, g, b, a)
 				.texture(u, v)
 				.overlay(OverlayTexture.DEFAULT_UV)
 				.light(15728880)
@@ -37,10 +39,9 @@ public class LaserHoldingRenderer<T extends LaserHoldingBlockEntity> extends Kin
 		double distance = Math.ceil(blockEntity.getLaserHitDistance());
 		double thickness = (blockEntity.getLaserStrength() / 200) + 0.1;
 		boolean active = blockEntity.getActive();
-
 		if (active) {
-			drawLaser(matrices, vertexConsumers.getBuffer(RenderLayer.getCutoutMipped()), direction, distance, thickness, false);
-			drawLaser(matrices, vertexConsumers.getBuffer(RenderLayer.getCutoutMipped()), direction, distance, thickness + 0.1, true);
+			drawLaser(matrices, vertexConsumers.getBuffer(RenderLayer.getDebugQuads()), direction, distance, thickness, false);
+			drawLaser(matrices, vertexConsumers.getBuffer(RenderLayer.getDebugQuads()), direction, distance, thickness + 0.1, true);
 		}
 	}
 
@@ -57,69 +58,60 @@ public class LaserHoldingRenderer<T extends LaserHoldingBlockEntity> extends Kin
 		matrices.translate(0.5, 0.5, 0.5);
 		matrices.multiply(direction.getRotationQuaternion());
 
-		// crappy way to do it and frainkly i dont care
-		//doesnt even work lmao
-		if (invert) {
-			// Front face (inverted)
-			renderBeamVertex(matrices, vertexConsumer, n, 0, p, 0, 1);
-			renderBeamVertex(matrices, vertexConsumer, p, 0, p, 1, 1);
-			renderBeamVertex(matrices, vertexConsumer, p, dist, p, 1, 0);
-			renderBeamVertex(matrices, vertexConsumer, n, dist, p, 0, 0);
-
-			// Right face (inverted)
-			renderBeamVertex(matrices, vertexConsumer, p, 0, p, 0, 1);
-			renderBeamVertex(matrices, vertexConsumer, p, 0, n, 1, 1);
-			renderBeamVertex(matrices, vertexConsumer, p, dist, n, 1, 0);
-			renderBeamVertex(matrices, vertexConsumer, p, dist, p, 0, 0);
-
-			// Back face (inverted)
-			renderBeamVertex(matrices, vertexConsumer, p, 0, n, 0, 1);
-			renderBeamVertex(matrices, vertexConsumer, n, 0, n, 1, 1);
-			renderBeamVertex(matrices, vertexConsumer, n, dist, n, 1, 0);
-			renderBeamVertex(matrices, vertexConsumer, p, dist, n, 0, 0);
-
-			// Left face (inverted)
-			renderBeamVertex(matrices, vertexConsumer, n, 0, n, 0, 1);
-			renderBeamVertex(matrices, vertexConsumer, n, 0, p, 1, 1);
-			renderBeamVertex(matrices, vertexConsumer, n, dist, p, 1, 0);
-			renderBeamVertex(matrices, vertexConsumer, n, dist, n, 0, 0);
-
-			// Top face (inverted)
-			renderBeamVertex(matrices, vertexConsumer, n, dist, n, 0, 0);
-			renderBeamVertex(matrices, vertexConsumer, n, dist, p, 0, 1);
-			renderBeamVertex(matrices, vertexConsumer, p, dist, p, 1, 1);
-			renderBeamVertex(matrices, vertexConsumer, p, dist, n, 1, 0);
-		} else {
 			// Front face
-			renderBeamVertex(matrices, vertexConsumer, n, 0, p, 0, 0);
-			renderBeamVertex(matrices, vertexConsumer, p, 0, p, 1, 0);
-			renderBeamVertex(matrices, vertexConsumer, p, dist, p, 1, 1);
-			renderBeamVertex(matrices, vertexConsumer, n, dist, p, 0, 1);
+			renderBeamVertex(matrices, vertexConsumer, n, 0, p, 0, 0, 1f, 1f, 1f, 1f);
+			renderBeamVertex(matrices, vertexConsumer, p, 0, p, 1, 0, 1f, 1f, 1f, 1f);
+			renderBeamVertex(matrices, vertexConsumer, p, dist-1, p, 1, 1, 1f, 1f, 1f, 1f);
+			renderBeamVertex(matrices, vertexConsumer, n, dist-1, p, 0, 1, 1f, 1f, 1f, 1f);
 
 			// Right face
-			renderBeamVertex(matrices, vertexConsumer, p, 0, p, 0, 0);
-			renderBeamVertex(matrices, vertexConsumer, p, 0, n, 1, 0);
-			renderBeamVertex(matrices, vertexConsumer, p, dist, n, 1, 1);
-			renderBeamVertex(matrices, vertexConsumer, p, dist, p, 0, 1);
+			renderBeamVertex(matrices, vertexConsumer, p, 0, p, 0, 0, 1f, 1f, 1f, 1f);
+			renderBeamVertex(matrices, vertexConsumer, p, 0, n, 1, 0, 1f, 1f, 1f, 1f);
+			renderBeamVertex(matrices, vertexConsumer, p, dist-1, n, 1, 1, 1f, 1f, 1f, 1f);
+			renderBeamVertex(matrices, vertexConsumer, p, dist-1, p, 0, 1, 1f, 1f, 1f, 1f);
 
 			// Back face
-			renderBeamVertex(matrices, vertexConsumer, p, 0, n, 0, 0);
-			renderBeamVertex(matrices, vertexConsumer, n, 0, n, 1, 0);
-			renderBeamVertex(matrices, vertexConsumer, n, dist, n, 1, 1);
-			renderBeamVertex(matrices, vertexConsumer, p, dist, n, 0, 1);
+			renderBeamVertex(matrices, vertexConsumer, p, 0, n, 0, 0, 1f, 1f, 1f, 1f);
+			renderBeamVertex(matrices, vertexConsumer, n, 0, n, 1, 0, 1f, 1f, 1f, 1f);
+			renderBeamVertex(matrices, vertexConsumer, n, dist-1, n, 1, 1, 1f, 1f, 1f, 1f);
+			renderBeamVertex(matrices, vertexConsumer, p, dist-1, n, 0, 1, 1f, 1f, 1f, 1f);
 
 			// Left face
-			renderBeamVertex(matrices, vertexConsumer, n, 0, n, 0, 0);
-			renderBeamVertex(matrices, vertexConsumer, n, 0, p, 1, 0);
-			renderBeamVertex(matrices, vertexConsumer, n, dist, p, 1, 1);
-			renderBeamVertex(matrices, vertexConsumer, n, dist, n, 0, 1);
+			renderBeamVertex(matrices, vertexConsumer, n, 0, n, 0, 0, 1f, 1f, 1f, 1f);
+			renderBeamVertex(matrices, vertexConsumer, n, 0, p, 1, 0, 1f, 1f, 1f, 1f);
+			renderBeamVertex(matrices, vertexConsumer, n, dist-1, p, 1, 1, 1f, 1f, 1f, 1f);
+			renderBeamVertex(matrices, vertexConsumer, n, dist-1, n, 0, 1, 1f, 1f, 1f, 1f);
+
+			//fade
+			// Front face
+			renderBeamVertex(matrices, vertexConsumer, n, dist-1, p, 0, 0, 1f, 1f, 1f, 1f);
+			renderBeamVertex(matrices, vertexConsumer, p, dist-1, p, 1, 0, 1f, 1f, 1f, 1f);
+			renderBeamVertex(matrices, vertexConsumer, p, dist, p, 1, 1, 1f, 1f, 1f, 0f);
+			renderBeamVertex(matrices, vertexConsumer, n, dist, p, 0, 1, 1f, 1f, 1f, 0f);
+
+			// Right face
+			renderBeamVertex(matrices, vertexConsumer, p, dist-1, p, 0, 0, 1f, 1f, 1f, 1f);
+			renderBeamVertex(matrices, vertexConsumer, p, dist-1, n, 1, 0, 1f, 1f, 1f, 1f);
+			renderBeamVertex(matrices, vertexConsumer, p, dist, n, 1, 1, 1f, 1f, 1f, 0f);
+			renderBeamVertex(matrices, vertexConsumer, p, dist, p, 0, 1, 1f, 1f, 1f, 0f);
+
+			// Back face
+			renderBeamVertex(matrices, vertexConsumer, p, dist-1, n, 0, 0, 1f, 1f, 1f, 1f);
+			renderBeamVertex(matrices, vertexConsumer, n, dist-1, n, 1, 0, 1f, 1f, 1f, 1f);
+			renderBeamVertex(matrices, vertexConsumer, n, dist, n, 1, 1, 1f, 1f, 1f, 0f);
+			renderBeamVertex(matrices, vertexConsumer, p, dist, n, 0, 1, 1f, 1f, 1f, 0f);
+
+			// Left face
+			renderBeamVertex(matrices, vertexConsumer, n, dist-1, n, 0, 0, 1f, 1f, 1f, 1f);
+			renderBeamVertex(matrices, vertexConsumer, n, dist-1, p, 1, 0, 1f, 1f, 1f, 1f);
+			renderBeamVertex(matrices, vertexConsumer, n, dist, p, 1, 1, 1f, 1f, 1f, 0f);
+			renderBeamVertex(matrices, vertexConsumer, n, dist, n, 0, 1, 1f, 1f, 1f, 0f);
 
 			// Top face
-			renderBeamVertex(matrices, vertexConsumer, n, dist, n, 0, 0);
-			renderBeamVertex(matrices, vertexConsumer, n, dist, p, 0, 1);
-			renderBeamVertex(matrices, vertexConsumer, p, dist, p, 1, 1);
-			renderBeamVertex(matrices, vertexConsumer, p, dist, n, 1, 0);
-		}
+			//renderBeamVertex(matrices, vertexConsumer, n, dist, n, 0, 0);
+			//renderBeamVertex(matrices, vertexConsumer, n, dist, p, 0, 1);
+			//renderBeamVertex(matrices, vertexConsumer, p, dist, p, 1, 1);
+			//renderBeamVertex(matrices, vertexConsumer, p, dist, n, 1, 0);
 		matrices.pop();
 	}
 
