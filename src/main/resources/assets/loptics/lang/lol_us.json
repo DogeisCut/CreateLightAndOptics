@@ -1,0 +1,18 @@
+{
+  "block.loptics.laser_emitter": "shooty thing",
+  "block.loptics.laser_redirector": "Mirror Bal",
+  "block.loptics.laser_receiver": "Laser eeter",
+  "block.loptics.pixel_screen": "oooh prety cooloors",
+
+  "item.loptics.laser_emitting_mechanism": "shooty thing part",
+
+  "create.tooltip.laser.strength": "pew pew stronk: %1$s hard",
+  "create.tooltip.laser.distance": "pew pew far: %1$s block",
+
+  "loptics.ponder.powering.header": "powering the pew pews",
+  "loptics.ponder.powering.text_1": "pew pew reckwires rotating thingy",
+  "loptics.ponder.powering.text_2": "doesnt this look cool",
+  "loptics.ponder.redirecting.header": "make them move",
+  "loptics.ponder.combining_power.header": "STRONGER TOGETHER!!!",
+  "loptics.ponder.laser_cutting.header": "LASER MAGICK!!!"
+}

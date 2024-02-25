@@ -162,11 +162,13 @@ public class LaserHoldingBlockEntity extends KineticBlockEntity implements IHave
 			return;
 		}
 		if (blockEntity instanceof LaserRedirectorBlockEntity) {
-			((LaserRedirectorBlockEntity) blockEntity).setActive(true);
-			((LaserRedirectorBlockEntity) blockEntity).setLaserStrength(getLaserStrength());
-			((LaserRedirectorBlockEntity) blockEntity).setLaserDistance(getLaserDistance()-getLaserHitDistance());
-			((LaserRedirectorBlockEntity) blockEntity).recursionValue += 1;
-			((LaserRedirectorBlockEntity) blockEntity).raycastLaserCheck();
+			if (!((LaserRedirectorBlockEntity) blockEntity).getActive()) {
+				((LaserRedirectorBlockEntity) blockEntity).setActive(true);
+				((LaserRedirectorBlockEntity) blockEntity).setLaserStrength(getLaserStrength());
+				((LaserRedirectorBlockEntity) blockEntity).setLaserDistance(getLaserDistance()-getLaserHitDistance());
+				((LaserRedirectorBlockEntity) blockEntity).recursionValue += 1;
+				((LaserRedirectorBlockEntity) blockEntity).raycastLaserCheck();
+			}
 		};
 	}
 
