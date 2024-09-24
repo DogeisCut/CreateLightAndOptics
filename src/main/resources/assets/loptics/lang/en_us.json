@@ -8,6 +8,7 @@
 
   "create.tooltip.laser.strength": "Laser Strength: %1$s hardness milliunits",
   "create.tooltip.laser.distance": "Laser distance: %1$s block(s)",
+  "create.tooltip.laser.distance_stop": "Laser stopped at: %1$s block(s)",
 
   "loptics.ponder.powering.header": "Powering Laser Emitters",
   "loptics.ponder.powering.text_1": "A Laser Emitter requires Cog or Shaft power",

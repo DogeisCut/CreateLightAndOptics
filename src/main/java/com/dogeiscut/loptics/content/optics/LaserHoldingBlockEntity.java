@@ -21,11 +21,13 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.RaycastContext;
 import net.minecraft.world.World;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class LaserHoldingBlockEntity extends KineticBlockEntity implements IHaveGoggleInformation {
@@ -34,6 +36,9 @@ public class LaserHoldingBlockEntity extends KineticBlockEntity implements IHave
 	private double laserDistance;
 	private double laserHitDistance;
 	private double laserStrength;
+	private int laserColor;
+
+	private List<LaserHoldingBlockEntity> incomingLasers = new ArrayList<>();
 
 	public int recursionValue = 0;
 
@@ -44,7 +49,7 @@ public class LaserHoldingBlockEntity extends KineticBlockEntity implements IHave
 		laserDistance = 0.0;
 		laserHitDistance = 0.0;
 		laserStrength = 0.0;
-		setLazyTickRate(1);
+		laserColor = 16777215;
 	}
 
 	protected ItemStack getOverheatItemStack() {
@@ -89,6 +94,10 @@ public class LaserHoldingBlockEntity extends KineticBlockEntity implements IHave
 
 	public void setLaserStrength(Double strength) { laserStrength = strength; }
 
+	public int getLaserColor() { return laserColor; }
+
+	public void setLaserColor(int color) { laserColor = color; }
+
 	@Override
 	public void write(NbtCompound compound, boolean clientPacket) {
 		compound.putBoolean("Active", active);
@@ -96,6 +105,7 @@ public class LaserHoldingBlockEntity extends KineticBlockEntity implements IHave
 		compound.putDouble("LaserDistance", laserDistance);
 		compound.putDouble("LaserHitDistance", laserHitDistance);
 		compound.putDouble("LaserStrength", laserStrength);
+		compound.putInt("LaserColor", laserColor);
 		super.write(compound, clientPacket);
 	}
 
@@ -106,25 +116,20 @@ public class LaserHoldingBlockEntity extends KineticBlockEntity implements IHave
 		laserDistance = compound.getDouble("LaserDistance");
 		laserHitDistance = compound.getDouble("LaserHitDistance");
 		laserStrength = compound.getDouble("LaserStrength");
+		laserColor = compound.getInt("LaserColor");
 		super.read(compound, clientPacket);
 	}
 
 	@Override
-	public void lazyTick() {
-		super.lazyTick();
+	public void tick() {
+		super.tick();
 		if (world.isClient)
 			return;
 		if (!getActive())
 			return;
 		recursionValue = 0;
 		raycastLaserCheck();
-	}
-
-	@Override
-	public void markDirty() {
-		super.markDirty();
-		recursionValue = 0;
-		findAndUpdateSurroundingLaserHolders();
+		this.world.updateListeners(this.getPos(), this.getCachedState(), this.getCachedState(), Block.NOTIFY_ALL);
 	}
 
 	protected void findAndUpdateSurroundingLaserHolders() {
@@ -140,6 +145,10 @@ public class LaserHoldingBlockEntity extends KineticBlockEntity implements IHave
 			if (hitResult.getType() == BlockHitResult.Type.BLOCK) {
 				BlockPos hitPos = hitResult.getBlockPos();
 				BlockEntity neighborBlockEntity = world.getBlockEntity(hitPos);
+
+				if (neighborBlockEntity != null) {
+					this.world.updateListeners(neighborBlockEntity.getPos(), neighborBlockEntity.getCachedState(), neighborBlockEntity.getCachedState(), Block.NOTIFY_ALL);
+				}
 
 				if (neighborBlockEntity instanceof LaserHoldingBlockEntity) {
 					((LaserHoldingBlockEntity) neighborBlockEntity).raycastLaserCheck();
@@ -166,6 +175,7 @@ public class LaserHoldingBlockEntity extends KineticBlockEntity implements IHave
 				((LaserRedirectorBlockEntity) blockEntity).setActive(true);
 				((LaserRedirectorBlockEntity) blockEntity).setLaserStrength(getLaserStrength());
 				((LaserRedirectorBlockEntity) blockEntity).setLaserDistance(getLaserDistance()-getLaserHitDistance());
+				((LaserRedirectorBlockEntity) blockEntity).setLaserColor(getLaserColor());
 				((LaserRedirectorBlockEntity) blockEntity).recursionValue += 1;
 				((LaserRedirectorBlockEntity) blockEntity).raycastLaserCheck();
 			//}
@@ -206,7 +216,16 @@ public class LaserHoldingBlockEntity extends KineticBlockEntity implements IHave
 					.style(Formatting.GREEN)
 					.forGoggles(tooltip);
 
+			Lang.translate("tooltip.laser.distance_stop", getLaserHitDistance())
+					.style(Formatting.GREEN)
+					.forGoggles(tooltip);
+
 		return true;
+	}
+
+	@Override
+	public Box getRenderBoundingBox() {
+		return INFINITE_EXTENT_AABB;
 	}
 }
 
